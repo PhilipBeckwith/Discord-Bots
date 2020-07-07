@@ -1,5 +1,5 @@
 const {
-    prefix, token, 
+    prefix, 
     id, userName,
     memeChatName, memeChatID,
     botScriptChatName, botScriptChatID,
@@ -7,6 +7,8 @@ const {
 } = require('./config.json');
 const discord = require('discord.js');
 const client = new discord.Client();
+
+let token = process.env.MEME_NARC_TOKEN
 const regex = '(https:\/\/)?(9gag\.com\/gag\/).*'
 
 let targetChatID;

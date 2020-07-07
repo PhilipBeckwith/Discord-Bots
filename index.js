@@ -1,2 +1,10 @@
-// This is the master file to run all bots that are being created.
-require('./MemeNarc/index')
+/*
+This is the file to run all bots. 
+Just require your bot to add it to the list of running bots. 
+*/
+
+//Config
+require('dotenv').config();
+
+// Running bots
+require('./MemeNarc/index');
