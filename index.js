@@ -8,3 +8,4 @@ require('dotenv').config();
 
 // Running bots
 require('./MemeNarc/index');
+require('./Budgett/index');
