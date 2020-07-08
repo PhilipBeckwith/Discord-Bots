@@ -17,7 +17,7 @@ const logOut = schedule.scheduleJob('0 30 21 * * 3', function(){
     client.destroy();
 });
 
-const postWednesdayMessage = schedule.scheduleJob('0 10 8 * * 3', function(){
+const postWednesdayMessage = schedule.scheduleJob('0 10 9 * * 3', function(){
     console.log("Reminding the Bois it's wednesday.")
     if(!loggedin){client.login(token);}
     client.channels.cache.get(generalChatID).send(`It's Wednesday My Dudes!`);
@@ -34,3 +34,6 @@ client.on('ready', () => {
     loggedin = true;
 });
 
+client.login(token);
+
+console.log('It\'s wednesday');
