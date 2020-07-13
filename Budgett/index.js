@@ -27,7 +27,8 @@ const postWednesdayMessage = schedule.scheduleJob('0 10 9 * * 3', function(){
 const postWednesdayMeme = schedule.scheduleJob('0 40 11 * * 3', function(){
     console.log("Meme Time");
     if(!loggedin){client.login(token);}
-    client.channels.cache.get(generalChatID).send(getWednesdayMeme().then(meme => meme))
+    getWednesdayMeme()
+        .then(meme => client.channels.cache.get(generalChatID).send(meme))
 });
 
 client.on('ready', () => {
