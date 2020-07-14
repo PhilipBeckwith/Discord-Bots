@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const DomParser = require('dom-parser');
-const {wednesdayPath, nGagPath, defaultMeme} = require('./config.json');
+const {wednesdayPath, nGagPath, defaultMeme} = require('../config.json');
 
 getWednesdayMeme = () =>{
     return fetch(wednesdayPath)
