@@ -1,6 +1,7 @@
 const schedule = require('node-schedule')
 const discord = require('discord.js');
-const {generalChatID, testMode} = require('./config.json');
+const getWednesdayMeme = require('./utils/utils');
+const {generalChatID, testMode, STGID} = require('./config.json');
 
 let token = process.env.BUDGETT_TOKEN
 const client = new discord.Client();
@@ -26,11 +27,17 @@ const postWednesdayMessage = schedule.scheduleJob('0 10 9 * * 3', function(){
 const postWednesdayMeme = schedule.scheduleJob('0 40 11 * * 3', function(){
     console.log("Meme Time");
     if(!loggedin){client.login(token);}
-    client.channels.cache.get(generalChatID).send(`https://www.youtube.com/watch?v=OzQ-KvxLVT0`);
+    getWednesdayMeme()
+        .then(meme => client.channels.cache.get(generalChatID).send(meme))
 });
 
 client.on('ready', () => {
     console.log('Ready for Wednesday my dude?');
+    if(process.env.ENVIRONMENT == 'STAGING'){
+        console.log("Are you ready kids?")
+        getWednesdayMeme()
+            .then(meme => client.channels.cache.get(STGID).send(meme))
+    }
     loggedin = true;
 });
 
