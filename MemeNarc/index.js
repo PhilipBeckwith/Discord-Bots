@@ -27,7 +27,7 @@ client.on('ready', () => {
 
 client.on("message", message => {
     console.log(message);
-    if(message.author.username != userName && message.author.id != id) { // So it doesn't talk to its self
+    if(message.author.bot == false) { //Any bot can post memes
         if(message.channel.id != targetChatID && message.channel.name != targetChatName){ // Won't repost to same chat
             if(message.content.match(regex)){
                 client.channels.resolveID()
