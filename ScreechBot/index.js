@@ -33,6 +33,10 @@ var commands = [{
   helptext: 'Nice way to say hello',
   action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false)
 },{
+  keyword: '/join',
+  helptext: 'Bot will join the voice channel you are on',
+  action: join
+},{
   keyword: '/leave',
   helptext: 'Bot GTFO the voice channel',
   action: leave
@@ -99,9 +103,20 @@ function playAudio(audio, leave){
   }
 }
 
+// Connects the bot to the voice channel that the command giver is on
+function join(msg){
+  // Only try to join the sender's voice channel if they are in one themselves
+  if (msg.member.voice.channel) {
+    msg.member.voice.channel.join();
+  } else {
+    msg.reply('You need to join a voice channel for me to follow');
+  }
+}
+
+
 // Disconnects the bot from the voice channel that the command giver is on
 function leave(msg){
-  // Only try to join the sender's voice channel if they are in one themselves
+  // Only try to leave the sender's voice channel if they are in one themselves
   if (msg.member.voice.channel) {
     msg.member.voice.channel.leave();
     msg.reply('Fine I will get off!');
