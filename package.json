@@ -8,6 +8,7 @@
     "dom-parser": "^0.1.6",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
+    "node-opus": "^0.3.3",
     "node-schedule": "^1.3.2"
   },
   "devDependencies": {},
