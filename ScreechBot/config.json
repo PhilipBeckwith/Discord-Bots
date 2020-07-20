@@ -1,5 +1,5 @@
 {
-    "LOOPDELAY": "0",
-    "GREETING_DELAY": "1000"
+    "LOOPDELAY": "100",
+    "GREETING_DELAY": "2000"
 }
 
