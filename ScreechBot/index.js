@@ -142,9 +142,9 @@ function channelWatchLoop(msg){
     .then(connection => { // Connection is an instance of VoiceConnection
       msg.reply('I have successfully connected to the channel and am now stalking you!');
       var old_members = voiceChannel.members.array().length;
-      var condition = true;
+      var continueLoop = true;
       (function eventChecks(){
-        if(condition === true){
+        if(continueLoop){
           if(voiceChannel.members) {
             new_members = voiceChannel.members.array().length;
             if(new_members > old_members){
@@ -154,10 +154,10 @@ function channelWatchLoop(msg){
               voiceChat.emit('memberLeave', connection);
             }
             // Leave Watch Loop if only one in chat
-            if(new_members === 1) condition = false;
+            if(new_members === 1) continueLoop = false;
             // Kill loop if bot is no longer in chat
             var me = voiceChannel.members.get(bot.user.id);
-            if(!me) condition = false;
+            if(!me) continueLoop = false;
             old_members = new_members;
           }
           setTimeout(eventChecks, LOOPDELAY);
