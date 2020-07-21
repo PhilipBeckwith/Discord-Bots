@@ -1,7 +1,7 @@
 const schedule = require('node-schedule')
 const discord = require('discord.js');
 const getWednesdayMeme = require('./utils/utils');
-const {generalChatID, testMode, STGID} = require('./config.json');
+const {generalChatID, testMode, StagingID} = require('./config.json');
 
 let token = process.env.BUDGETT_TOKEN
 const client = new discord.Client();
@@ -36,7 +36,7 @@ client.on('ready', () => {
     if(process.env.ENVIRONMENT == 'STAGING'){
         console.log("Are you ready kids?")
         getWednesdayMeme()
-            .then(meme => client.channels.cache.get(STGID).send(meme))
+            .then(meme => client.channels.cache.get(StagingID).send(meme))
     }
     loggedin = true;
 });
