@@ -7,6 +7,5 @@ Just require your bot to add it to the list of running bots.
 require('dotenv').config();
 
 // Running bots
-require('./MemeNarc/index');
-require('./Budgett/index');
-require('./ScreechBot/index');
+require('./BotModules/Budgett/index');
+require('./BotModules/Megabot/index');
