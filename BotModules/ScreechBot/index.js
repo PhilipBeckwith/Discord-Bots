@@ -6,42 +6,42 @@ const {
 const EventEmitter = require('events');
 const path = require('path');
 
-//Custom event emitter for capturing events from the watch loop
-class VoiceEmitter extends EventEmitter {}
-voiceChat = new VoiceEmitter();
-
-//Simple command register. Allows for reuse of code and ease of adding in new commands
-// - keyword: is the command keyword than spawns the action - TODO: create a way to receive arguments
-// - helptext: is the text that will show up when the user calls the /help command. This should describe what the command does and how the user should use it.
-// - action: is the function that is called when the keyword is typed in chat. Action function is of the form function(msg) with msg being the discord msg that spawned the command.
-var commands = [{
-  keyword: '/help',
-  helptext: 'When you are a noob and need to reference the commands',
-  action: help
-},{
-  keyword: '/screech',
-  helptext: 'Because fuck everyone on the voice channel',
-  action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true)
-},{
-  keyword: '/greeting',
-  helptext: 'Nice way to say hello',
-  action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false)
-},{
-  keyword: '/join',
-  helptext: 'Bot will join the voice channel you are on',
-  action: join
-},{
-  keyword: '/leave',
-  helptext: 'Bot GTFO the voice channel',
-  action: leave
-},{
-  keyword: '/watch',
-  helptext: 'Stalk the voice channel and greet new comers',
-  action: watch
-}];
-
-
 module.exports = function(bot) {
+  //Custom event emitter for capturing events from the watch loop
+  class VoiceEmitter extends EventEmitter {}
+  voiceChat = new VoiceEmitter();
+
+  //Simple command register. Allows for reuse of code and ease of adding in new commands
+  // - keyword: is the command keyword than spawns the action - TODO: create a way to receive arguments
+  // - helptext: is the text that will show up when the user calls the /help command. This should describe what the command does and how the user should use it.
+  // - action: is the function that is called when the keyword is typed in chat. Action function is of the form function(msg) with msg being the discord msg that spawned the command.
+  var commands = [{
+    keyword: '/help',
+    helptext: 'When you are a noob and need to reference the commands',
+    action: help
+  },{
+    keyword: '/screech',
+    helptext: 'Because fuck everyone on the voice channel',
+    action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true)
+  },{
+    keyword: '/greeting',
+    helptext: 'Nice way to say hello',
+    action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false)
+  },{
+    keyword: '/join',
+    helptext: 'Bot will join the voice channel you are on',
+    action: join
+  },{
+    keyword: '/leave',
+    helptext: 'Bot GTFO the voice channel',
+    action: leave
+  },{
+    keyword: '/watch',
+    helptext: 'Stalk the voice channel and greet new comers',
+    action: watch
+  }];
+
+
   bot.on('ready', () => {
     console.info(`Logged in as ${bot.user.tag}!`);
   });

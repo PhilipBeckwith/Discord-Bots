@@ -6,4 +6,6 @@ require('../ScreechBot/index')(client);
 
 const TOKEN = process.env.BOT_TOKEN;
 
-client.login(TOKEN);
+if(TOKEN) {
+  client.login(TOKEN);
+}

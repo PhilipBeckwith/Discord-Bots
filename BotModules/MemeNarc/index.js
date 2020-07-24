@@ -11,7 +11,7 @@ const regex = '(https:\/\/)?(9gag\.com\/gag\/).*';
 let targetChatID;
 let targetChatName;
 
-modules.exports = function(client) {
+module.exports = function(client) {
 
   client.on('ready', () => {
     if(testMode == 'true'){

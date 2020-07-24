@@ -10,7 +10,9 @@ var loggedin = false;
 
 const logOn = schedule.scheduleJob('0 0 4 * * 3', function(){
     console.log("It's Wednesday My Dudes!")
-    client.login(token);
+    if(token){
+        client.login(token);
+    }
 });
 
 const logOut = schedule.scheduleJob('0 30 21 * * 3', function(){
@@ -41,6 +43,8 @@ client.on('ready', () => {
     loggedin = true;
 });
 
-client.login(token);
+if(token){
+    client.login(token);
+}
 
 console.log('It\'s wednesday');
