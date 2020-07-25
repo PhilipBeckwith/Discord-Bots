@@ -11,9 +11,9 @@ const regex = '(https:\/\/)?(9gag\.com\/gag\/).*';
 let targetChatID;
 let targetChatName;
 
-module.exports = function(client) {
+module.exports = function(bot) {
 
-  client.on('ready', () => {
+  bot.on('ready', () => {
     if(testMode == 'true'){
       targetChatID = botScriptChatID;
       targetChatName = botScriptChatName;
@@ -24,13 +24,13 @@ module.exports = function(client) {
     console.log('Up and Sweeping away!');
   });
 
-  client.on("message", message => {
+  bot.on("message", message => {
     console.log(message);
     if(message.author.bot == false) { //Any bot can post memes
       if(message.channel.id != targetChatID && message.channel.name != targetChatName){ // Won't repost to same chat
         if(message.content.match(regex)){
-          client.channels.resolveID()
-          client.channels.cache.get(targetChatID).send(
+          bot.channels.resolveID()
+          bot.channels.cache.get(targetChatID).send(
             `${message.author.username} Posted a Meme On ${message.channel.name}:\n${message.content}`
           );
           console.log("Message from Re-Homed")

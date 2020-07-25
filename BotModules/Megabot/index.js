@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const bot = new Discord.Client();
 
-require('../MemeNarc/index')(client);
-require('../ScreechBot/index')(client);
+require('../MemeNarc/index')(bot);
+require('../ScreechBot/index')(bot);
 
 const TOKEN = process.env.BOT_TOKEN;
 
 if(TOKEN) {
-  client.login(TOKEN);
+  bot.login(TOKEN);
 }
