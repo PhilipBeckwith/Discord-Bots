@@ -13,7 +13,9 @@ services:
       - 3000:3000
     volumes:
       - ./:/deploy
+    secrets:
+      - git_url_with_auth
 
 secrets:
-  gitlab_repo_url_with_auth:
-    file: ./secrets/git_url_with_auth
+  git_url_with_auth:
+    file: ./secrets/git_url_with_auth.txt
