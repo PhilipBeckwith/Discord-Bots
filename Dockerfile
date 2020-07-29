@@ -4,22 +4,20 @@ from node:lts-alpine3.11
 # Set time zone - default of America/Phoenix
 ARG TZ='America/Phoenix'
 ENV DEFAULT_TZ ${TZ}
+
+# Set timezone, install build and run depenacies
 RUN apk add -U tzdata \
 	&& cp /usr/share/zoneinfo/${DEFAULT_TZ} /etc/localtime \
-	&& apk del tzdata
+	&& apk del tzdata \
+  && apk add make gcc g++ \
+  && apk add python ffmpeg
 
-# Install build depenacies
-RUN apk add make gcc g++
-
-# Install run depenacies
-RUN apk add python ffmpeg
-
-# Copy over and build app
+# Copy over app
 COPY ./ ./
-run npm install
 
-#Clean up build dependancies and apk cache
-RUN apk del make gcc g++ \
+#Build App and clean up build dependancies and apk cache
+run npm install \
+  && apk del make gcc g++ \
 	&& rm -rf /var/cache/apk/*
 
 #Starting the file
