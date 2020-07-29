@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  discord-bots:
+    build: .
+    restart: always
+
+  auto-deploy:
+    build: ./auto-deploy
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/deploy
+
+secrets:
+  gitlab_repo_url_with_auth:
+    file: ./secrets/git_url_with_auth
