@@ -1,4 +1,4 @@
-const GetCommonGames = require('../../DB/index')
+const MongoDB = require('../../DB/MongoDB')
   
 module.exports = function(bot) {
 
@@ -28,7 +28,7 @@ module.exports = function(bot) {
   });
   
   function PickRandomSharedGame(msg, mentions){
-    GetGamesList(mentions).then(games =>{
+    MongoDB.GetCommonGames(mentions).then(games =>{
       let rdmIdx = Math.floor(Math.random() * games.length)
       msg.channel.send(`Lets play ${games[rdmIdx].name}!`)
     })
@@ -36,13 +36,9 @@ module.exports = function(bot) {
   };
 
   function ShowAllSharedGames(msg, mentions){
-    GetGamesList(mentions).then(games =>{
+    MongoDB.GetCommonGames(mentions).then(games =>{
       msg.channel.send(`${msg.mentions.users.map(user => user.username).join(", ")} share: \n${games.map(game => game.name).join("\n")}`)
     })
     .catch(err => console.log(err))
   };
-
-  const GetGamesList = async (users) =>{
-    return await GetCommonGames(users)
-  }
 }
