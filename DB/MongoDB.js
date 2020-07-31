@@ -9,6 +9,10 @@ async function GetCommonGames(users){
         .toArray()
 }
 
+function Close(){
+    connection.CloseMongoDB();
+}
+
 function BuildCommonGamesAggPipeline(users){
     return [
         { $match: { _id: { $in: users }} },
@@ -34,5 +38,6 @@ function BuildCommonGamesAggPipeline(users){
 }
 
 module.exports = {
-    GetCommonGames
+    GetCommonGames,
+    Close
 }
