@@ -43,7 +43,7 @@ module.exports = function(bot) {
 
 
   bot.on('ready', () => {
-    console.info(`Logged in as ${bot.user.tag}!`);
+    console.info(`Screechbot logged in as ${bot.user.tag}!`);
   });
 
   // Command Processing. Cleans up commands after they have been issued
