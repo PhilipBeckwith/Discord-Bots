@@ -1,4 +1,4 @@
-const MongoDB = require('../../DB/MongoDB')
+const MongoDB = require('../../MongoDB/MongoDB')
   
 module.exports = function(bot) {
 
