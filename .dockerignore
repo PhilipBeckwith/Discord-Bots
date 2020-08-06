@@ -1,0 +1,7 @@
+# ignore git an cache folders
+.git
+.cache
+
+# Ignoring node mudules
+node_modules
+package-lock.json

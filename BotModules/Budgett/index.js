@@ -43,6 +43,13 @@ bot.on('ready', () => {
     loggedin = true;
 });
 
+bot.on("message", message => {
+        if(message.content.match('GIVE ME WEDNESDAY!')){
+            getWednesdayMeme()
+            .then(meme => bot.channels.cache.get(generalChatID).send(meme))
+        }
+  })
+
 if(token){
     bot.login(token);
 }

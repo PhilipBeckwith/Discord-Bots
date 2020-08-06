@@ -25,7 +25,6 @@ module.exports = function(bot) {
   });
 
   bot.on("message", message => {
-    console.log(message);
     if(message.author.bot == false) { //Any bot can post memes
       if(message.channel.id != targetChatID && message.channel.name != targetChatName){ // Won't repost to same chat
         if(message.content.match(regex)){
