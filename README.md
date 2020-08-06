@@ -22,3 +22,10 @@ Removes Memes that weren't put in a meme chat.
 Has several chat commands including /screech which will have the bot screech into the voice chat. Primarily hangs in voice chat and greets newcomers.
 
 Use /help to list available commands when running
+
+### SteamBot
+Interfaces with MongoDB Instance to find common games between users in channel.
+
+Use /pickgame @user @user to choose a single game shared by mentioned users 
+
+Use /games @user @user to print a list of all shared games between mentioned users
