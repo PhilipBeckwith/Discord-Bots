@@ -1,32 +1,33 @@
 const MongoDB = require('../../MongoDB/MongoDB')
-  
+const Commander = require('../CommanderInChief/commander-in-chief');
+
 module.exports = function(bot) {
 
   var commands = [{
     keyword: '/games',
     helptext: 'Sends a list of all shared games between mentioned users',
-    action: ShowAllSharedGames
+    action: pullMentions(ShowAllSharedGames)
   },{
     keyword: '/pickgame',
     helptext: 'Sends a game chosen randomly from a list of games shared between mentioned users',
-    action: PickRandomSharedGame
+    action: pullMentions(PickRandomSharedGame)
   }];
+
+  Commander.registerCommands("Steambot", commands);
 
   bot.on('ready', () => {
     console.info(`Steambot logged in as ${bot.user.tag}!`);
   });
-  
-  bot.on("message", msg => {
-    let arrMentions = msg.mentions.users.map(user => user.id)
-    if(arrMentions.length > 1){
-      commands.forEach(command => {
-        if(msg.content.startsWith(command.keyword)){
-          command.action(msg, arrMentions);
-        }
-      });
+
+  function pullMentions(action){
+    return function(msg) {
+      let arrMentions = msg.mentions.users.map(user => user.id)
+      if(arrMentions.length > 1){
+        action(msg, arrMentions);
+      }
     }
-  });
-  
+  }
+
   function PickRandomSharedGame(msg, mentions){
     MongoDB.GetCommonGames(mentions).then(games =>{
       let rdmIdx = Math.floor(Math.random() * games.length)
