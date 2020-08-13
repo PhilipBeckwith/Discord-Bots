@@ -1,6 +1,5 @@
 # Running from node
 FROM node:lts-alpine3.11
-ARG NEW_RELIC_NO_CONFIG_FILE=true
 ENV NR_NATIVE_METRICS_NO_BUILD=true
 
 # Set time zone - default of America/Phoenix
