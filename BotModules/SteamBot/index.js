@@ -36,7 +36,10 @@ module.exports = function(bot) {
         msg.channel.send(`Lets play ${games[rdmIdx].name}!`)
         MongoDB.Close()
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        MongoDB.Close()
+        console.log(err)
+      })
     }
   };
 
@@ -47,7 +50,10 @@ module.exports = function(bot) {
         msg.channel.send(`${msg.mentions.users.map(user => user.username).join(", ")} share: \n${games.map(game => game.name).join("\n")}`)
         MongoDB.Close()
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        MongoDB.Close()
+        console.log(err)
+      })
     }
   };
 
@@ -68,6 +74,10 @@ module.exports = function(bot) {
           msg.channel.send(`${game.name}:\n\tIs owned by: ${game.members.map(member => member.alias).join(", ")}`)
         })
       }
+    })
+    .catch(err => {
+      MongoDB.Close()
+      console.log(err)
     })
   }
 
