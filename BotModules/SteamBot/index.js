@@ -30,7 +30,7 @@ module.exports = function(bot) {
   
   function PickRandomSharedGame(msg){
     let mentions = msg.mentions.users.map(user => user.id)
-    if(arrMentions.length > 1){
+    if(mentions.length > 1){
       MongoDB.GetCommonGames(mentions).then(games =>{
         let rdmIdx = Math.floor(Math.random() * games.length)
         msg.channel.send(`Lets play ${games[rdmIdx].name}!`)
@@ -45,7 +45,7 @@ module.exports = function(bot) {
 
   function ShowAllSharedGames(msg){
     let mentions = msg.mentions.users.map(user => user.id)
-    if(arrMentions.length > 1){
+    if(mentions.length > 1){
       MongoDB.GetCommonGames(mentions).then(games =>{
         msg.channel.send(`${msg.mentions.users.map(user => user.username).join(", ")} share: \n${games.map(game => game.name).join("\n")}`)
         MongoDB.Close()
