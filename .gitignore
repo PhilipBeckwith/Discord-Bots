@@ -88,3 +88,6 @@ typings/
 .dynamodb/
 
 secrets/
+
+# Package-Lock
+package-lock
