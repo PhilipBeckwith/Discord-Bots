@@ -13,8 +13,11 @@ module.exports = function(bot) {
       isBot : message.author.bot,
       id : message.id
     };
-
-    newrelic.recordCustomEvent('DiscordUsageStats', messageStats);
+    try{
+      newrelic.recordCustomEvent('DiscordUsageStats', messageStats);
+    }catch(err){
+      console.log("Well shit.... There goes our observability.")
+    }
   })
 
 }
