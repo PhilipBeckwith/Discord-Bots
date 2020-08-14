@@ -1,10 +1,15 @@
 var commands = [];
 
 //Simple command register. Allows for reuse of code and ease of adding in new commands
+// - context: The bot context that this command is for undefined is a base command
 // - keyword: is the command keyword than spawns the action
 // - helptext: is the text that will show up when the user calls the /help command. This should describe what the command does and how the user should use it.
 // - action: is the function that is called when the keyword is typed in chat. Action function is of the form function(msg) with msg being the discord msg that spawned the command.
 // - preserve: should the command message be deleted after being called? Set true to preserve default behavior is to delete command message.
+// - args: An array of argument keywords and text that will be pulled for use.
+//   args.index: which index of the command will count as this arguement. Arg[0] is the command keyword itself
+//   args.keyword: a keyword in the command line that indicates that the next index is the parameter in question. eg /command keyword arg
+//   args.helptext: helptext for the specific arg
 function registerCommand(context, commandOptions){
   commands.push({
     context: context,
@@ -16,10 +21,12 @@ function registerCommand(context, commandOptions){
   });
 }
 
+// Registers an array of commands to a specific context
 function registerCommands(context, commandArray){
   commandArray.forEach(command => registerCommand(context, command) );
 }
 
+// Registers the basic help command
 function registerHelp() {
   registerCommand(undefined, {
     keyword: '/help',
@@ -34,13 +41,7 @@ function registerHelp() {
 
 //Help text generation. Appears in the following format:
 //
-// Looks like {@user} is an idiot and needs guidence on the commands:
-//
-// Command: {keyword}
-// {helptext}
-//
-// Next command etc...
-//
+// uses code block tricks to format the text - https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51
 //  - msg: the message object from discord https://discord.js.org/#/docs/main/stable/class/Message
 function help(msg, args){
   var reply = `Looks like ${msg.member} is an idiot and needs guidence on the commands: \n\n`;
@@ -110,10 +111,9 @@ function help(msg, args){
 
 
 function attachToBot(bot) {
-
   registerHelp();
 
-  // Command Processing. Cleans up commands after they have been issued
+  // Command Processing.
   bot.on('message', msg => {
     if (!msg.guild) return;
 
@@ -130,6 +130,12 @@ function attachToBot(bot) {
   });
 }
 
+// Returns the command line string broken down into arguments like follows
+// args = {
+//   raw [ command, param1, param2, ... ],
+//   keywordArg1: param1
+//   keywordArg2: param2
+// }
 function extractArgs(command, msg){
   var args = {};
   args.raw = [];
@@ -144,21 +150,13 @@ function extractArgs(command, msg){
     }
     return  p;
   }, {a: ['']}).a
-  //   do {
-  //     var match = /[^\s"]+|"([^"]*)"/gi.exec(msg.content);
-  //     console.log(match);
-  //     if(match != null) {
-  //       args.raw.push(match[1] ? match[1] : match[0]);
-  //       console.log(args.raw);
-  //     }
-  //   } while (false);
-  //} while (match != null);
-  console.log(args.raw);
 
   if(command.args){
     command.args.forEach((arg) => {
-      var index = arg.index ? arg.index : args.raw.indexOf(arg.keyword)+1;
-      args[arg] = index > 0 ? args.raw[index] : undefined;
+      if(arg.keyword){
+        var index = arg.index ? arg.index : args.raw.indexOf(arg.keyword)+1;
+        args[arg.keyword] = index > 0 ? args.raw[index] : undefined;
+      }
     });
   }
 
