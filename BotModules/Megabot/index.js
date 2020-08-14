@@ -5,6 +5,7 @@ require('../MemeNarc/index')(bot);
 require('../ScreechBot/index')(bot);
 require('../SteamBot/index')(bot);
 require('../NewRelicCustomEvents/index')(bot);
+require('../Pager/index')(bot);
 
 const TOKEN = process.env.BOT_TOKEN;
 

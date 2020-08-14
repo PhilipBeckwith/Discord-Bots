@@ -1,0 +1,5 @@
+{
+    "Call":"<Response><Say>${MESSAGE}</Say></Response>",
+    "Introduction" : "<Response><Say>Hello ${NAME}. I am Megabot. I am active! </Say></Response>",
+    "RequestGame" : "<Response><Say>Hello ${NAME}, This is NOT a drill. Gondor calls for aid. So get online bitch! </Say></Response>"
+}
