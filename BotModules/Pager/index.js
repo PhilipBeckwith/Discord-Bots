@@ -53,9 +53,14 @@ function pageFriend(user, text){
 }
 
 function customCall(user, text){
-  const message = text.match(/\[(.*)]/)[1];
-  return templates.Call.interpolate({
-    MESSAGE: message
+  const message = text.match(/\[(.*)]/);
+  let name = getName(user);
+  return message ?
+   templates.Call.interpolate({
+    MESSAGE: message[1]
+  }) :
+  templates.ERROR.interpolate({
+    NAME: name
   });
 }
 
@@ -63,7 +68,6 @@ function makeCall(callConfig){
   twilioClient.calls.create(callConfig)
   .then(call => console.log(call.sid));
 }
-
 
 module.exports = function(bot) {
 
