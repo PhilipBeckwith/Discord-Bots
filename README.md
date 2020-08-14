@@ -29,3 +29,5 @@ Interfaces with MongoDB Instance to find common games between users in channel.
 Use /pickgame @user @user to choose a single game shared by mentioned users 
 
 Use /games @user @user to print a list of all shared games between mentioned users
+
+Use /search XXXX to print a list of games matching the search text and the owners of those games

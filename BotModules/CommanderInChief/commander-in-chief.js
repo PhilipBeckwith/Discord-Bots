@@ -119,7 +119,7 @@ function attachToBot(bot) {
 
     commands.forEach(command => {
       if(msg.content.startsWith(command.keyword)){
-        var args = extractArgs(command, msg);
+        var args = extractArgs(command, msg.content);
         command.action(msg, args);
         if(!command.preserve) {
           msg.delete();
@@ -136,20 +136,11 @@ function attachToBot(bot) {
 //   keywordArg1: param1
 //   keywordArg2: param2
 // }
-function extractArgs(command, msg){
+function extractArgs(command, text){
   var args = {};
   args.raw = [];
 
-  args.raw = msg.content.match(/\\?.|^$/g).reduce((p, c) => {
-    if(c === '"'){
-      p.quote ^= 1;
-    }else if(!p.quote && c === ' '){
-      p.a.push('');
-    }else{
-      p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
-    }
-    return  p;
-  }, {a: ['']}).a
+  args.raw = breakStringIntoArgumentArray(text);
 
   if(command.args){
     command.args.forEach((arg) => {
@@ -161,6 +152,19 @@ function extractArgs(command, msg){
   }
 
   return args;
+}
+
+function breakStringIntoArgumentArray(text){
+  return text.match(/\\?.|^$/g).reduce((p, c) => {
+    if(c === '"'){
+      p.quote ^= 1;
+    }else if(!p.quote && c === ' '){
+      p.a.push('');
+    }else{
+      p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
+    }
+    return  p;
+  }, {a: ['']}).a
 }
 
 module.exports = {
