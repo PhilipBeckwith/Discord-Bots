@@ -14,6 +14,16 @@ class MongoConnection{
         this.Client.close();
     }
 
+    async GetMember(userID){
+        const db = await this.Client.db(dbName)
+        return db
+            .collection(COLL_Members)
+            .findOne(
+                { _id: userID },
+                { projection: { games: 0 } }
+            )
+    }
+
     async GetCommonGames(users){
         const db = await this.Client.db(dbName)
         return db
