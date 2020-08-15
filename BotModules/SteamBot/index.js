@@ -36,11 +36,12 @@ module.exports = function(bot) {
       MongoConn.GetCommonGames(mentions).then(games =>{
         let rdmIdx = Math.floor(Math.random() * games.length)
         msg.channel.send(`Lets play ${games[rdmIdx].name}!`)
-        MongoConn.CloseConnection()
       })
       .catch(err => {
-        MongoConn.CloseConnection()
         console.log(err)
+      })
+      .finally(()=>{
+        MongoConn.CloseConnection()
       })
     }
   };
@@ -51,11 +52,12 @@ module.exports = function(bot) {
       MongoConn = new MongoConnection()
       MongoConn.GetCommonGames(mentions).then(games =>{
         msg.channel.send(`${msg.mentions.users.map(user => user.username).join(", ")} share: \n${games.map(game => game.name).join("\n")}`)
-        MongoConn.CloseConnection()
       })
       .catch(err => {
-        MongoConn.CloseConnection()
         console.log(err)
+      })
+      .finally(()=>{
+        MongoConn.CloseConnection()
       })
     }
   };
@@ -77,12 +79,13 @@ module.exports = function(bot) {
         games.forEach(game => {
           msg.channel.send(`${game.name}:\n\tIs owned by: ${game.members.map(member => member.alias).join(", ")}`)
         })
-        MongoConn.CloseConnection()
       }
     })
     .catch(err => {
-      MongoConn.CloseConnection()
       console.log(err)
+    })
+    .finally(()=>{
+      MongoConn.CloseConnection()
     })
   }
 
