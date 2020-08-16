@@ -1,5 +1,4 @@
 const MongoDB = require('../../MongoDB/MongoDB')
-const Commander = require('../CommanderInChief/commander-in-chief');
 
 module.exports = function(bot) {
 
@@ -16,8 +15,6 @@ module.exports = function(bot) {
     helptext: 'Searches Games Collection for game that most closely matches message content. Limits results up to 3',
     action: SearchGames
   }];
-
-  Commander.registerCommands("Steambot", commands);
 
   bot.on('ready', () => {
     console.info(`Steambot logged in as ${bot.user.tag}!`);
@@ -79,4 +76,8 @@ module.exports = function(bot) {
   function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   };
+
+  return {
+    commands
+  }
 }

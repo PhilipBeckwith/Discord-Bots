@@ -5,7 +5,6 @@ const GREETING_DELAY = process.env.SCREECHBOT_GREETING_DELAY ? process.env.SCREE
 
 const EventEmitter = require('events');
 const path = require('path');
-const Commander = require('../CommanderInChief/commander-in-chief');
 
 module.exports = function(bot) {
   //Custom event emitter for capturing events from the watch loop
@@ -15,26 +14,29 @@ module.exports = function(bot) {
   var commands = [{
     keyword: '/screech',
     helptext: 'Because fuck everyone on the voice channel',
-    action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true)
+    action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true),
+    autoCleanup: true
   },{
     keyword: '/greeting',
     helptext: 'Nice way to say hello',
-    action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false)
+    action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false),
+    autoCleanup: true
   },{
     keyword: '/join',
     helptext: 'Bot will join the voice channel you are on',
-    action: join
+    action: join,
+    autoCleanup: true
   },{
     keyword: '/leave',
     helptext: 'Bot GTFO the voice channel',
-    action: leave
+    action: leave,
+    autoCleanup: true
   },{
     keyword: '/watch',
     helptext: 'Stalk the voice channel and greet new comers',
-    action: watch
+    action: watch,
+    autoCleanup: true
   }];
-
-  Commander.registerCommands("Screechbot", commands);
 
 
   bot.on('ready', () => {
@@ -136,4 +138,7 @@ module.exports = function(bot) {
     }, GREETING_DELAY);
   });
 
+  return {
+    commands
+  }
 }

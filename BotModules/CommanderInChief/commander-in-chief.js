@@ -5,7 +5,7 @@ var commands = [];
 // - keyword: is the command keyword than spawns the action
 // - helptext: is the text that will show up when the user calls the /help command. This should describe what the command does and how the user should use it.
 // - action: is the function that is called when the keyword is typed in chat. Action function is of the form function(msg) with msg being the discord msg that spawned the command.
-// - preserve: should the command message be deleted after being called? Set true to preserve default behavior is to delete command message.
+// - autoCleanup: should the command message be deleted after being called? Set true to auto cleanup default behavior is to preserve command message.
 // - args: An array of argument keywords and text that will be pulled for use.
 //   args.index: which index of the command will count as this arguement. Arg[0] is the command keyword itself
 //   args.keyword: a keyword in the command line that indicates that the next index is the parameter in question. eg /command keyword arg
@@ -16,7 +16,7 @@ function registerCommand(context, commandOptions){
     keyword: commandOptions.keyword,
     helptext: commandOptions.helptext,
     action: commandOptions.action,
-    preserve: commandOptions.preserve,
+    autoCleanup: commandOptions.autoCleanup,
     args: commandOptions.args
   });
 }
@@ -32,6 +32,7 @@ function registerHelp() {
     keyword: '/help',
     helptext: 'When you are a noob and need to reference the commands',
     action: help,
+    autoCleanup: true,
     args: [{
       index: 1,
       helptext: 'Include context to filter help commands displayed. "/help <context>" will display the command documentation for that context. Call "/help all" to see all commands or "/help list" to list all contexts.'
@@ -59,6 +60,7 @@ function help(msg, args){
     default:
       printContext(filterContext);
       break;
+
   }
 
   function printAll(){
@@ -80,12 +82,16 @@ function help(msg, args){
   }
 
   function printContext(context){
-    reply += "```asciidoc" + `\n`;
-    if(context) reply += context + `\n`;
-    if(context) reply += "=====" + `\n`;
-    //else        reply += "Base Commands: " + `\n`;
-    commands.filter(command => CaseInsensitive(command.context) == CaseInsensitive(context)).forEach(printCommand);
-    reply += "```" + `\n`;
+    if(contexts.indexOf(context) != -1){
+      reply += "```asciidoc" + `\n`;
+      if(context) reply += context + `\n`;
+      if(context) reply += "=====" + `\n`;
+      //else        reply += "Base Commands: " + `\n`;
+      commands.filter(command => CaseInsensitive(command.context) == CaseInsensitive(context)).forEach(printCommand);
+      reply += "```" + `\n`;
+    } else {
+      printContextNotFound(context);
+    }
   }
 
   function CaseInsensitive(input){
@@ -106,6 +112,16 @@ function help(msg, args){
     reply += `\t  ` + arg.helptext + `\n`
   }
 
+  function printContextNotFound(context){
+    reply += "```asciidoc" + `\n`;
+    if(context) reply += context + " is not found. Printing list of available contexts" + `\n`;
+    if(context) reply += "=====" + `\n`;
+    //else        reply += "Base Commands: " + `\n`;
+    reply += "```" + `\n`;
+
+    printListOfContexts();
+  }
+
   msg.channel.send(reply);
 }
 
@@ -121,7 +137,7 @@ function attachToBot(bot) {
       if(msg.content.startsWith(command.keyword)){
         var args = extractArgs(command, msg.content);
         command.action(msg, args);
-        if(!command.preserve) {
+        if(command.autoCleanup) {
           msg.delete();
         }
       }
