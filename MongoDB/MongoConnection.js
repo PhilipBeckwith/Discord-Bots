@@ -19,9 +19,32 @@ class MongoConnection{
         return db
             .collection(COLL_Members)
             .findOne(
-                { _id: userID },
-                { projection: { games: 0 } }
+              { _id: userID },
+              { projection: { games: 0 } }
             )
+    }
+
+    async GetAllMembers(){
+      const db = await this.Client.db(dbName)
+      return db
+          .collection(COLL_Members)
+          .find(
+            {},
+            {projection: {games: 0} }
+          )
+          .toArray()
+    }
+
+    async UpdateMemberField(userID, fieldName, newFieldVal){
+      const db = await this.Client.db(dbName)
+      var update = {}
+      update[fieldName] = newFieldVal
+      return db
+        .collection(COLL_Members)
+        .updateOne(
+          {_id: userID},
+          {$set: update }
+        )
     }
 
     async GetCommonGames(users){
