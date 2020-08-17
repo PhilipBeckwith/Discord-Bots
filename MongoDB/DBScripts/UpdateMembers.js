@@ -5,7 +5,10 @@ INSTRUCTIONS
 
 To use this script, you'll need to run this specific file from node:
 
-    node .\MongoDB\DBScripts\UpdateMembers.js
+    - node .\MongoDB\DBScripts\UpdateMembers.js <FIELDNAME>
+    
+    - <FILENAME> is an optional parameter the script will default to MemberExport if no filename is provided
+        - No extension required
 
 The major things to be aware of are:
     - you need to provide a specific fieldName you want to update
@@ -15,7 +18,6 @@ The major things to be aware of are:
     - The script will not allow you to update _id or steamID fields due to potential problems
     - The script does not currently allow you to add new fields
 */
-
 const dotenv = require('dotenv').config();
 const MongoConnection = require("../MongoConnection");
 const path = require('path');
@@ -25,7 +27,13 @@ const fs = require('fs');
 // Note that field names are case sensitive
 var fieldToUpdate = "phone"
 
-if(fs.existsSync(path.join(__dirname, "ScriptsOutput", "MemberImport.json"))){
+// Default 
+var sourceFolder = "MemberExport"
+if(process.argv[2]){
+    sourceFolder = process.argv[2]
+}
+
+if(fs.existsSync(path.join(__dirname, "ScriptsOutput", `${sourceFolder}.json`))){
     const Members = require('./ScriptsOutput/MemberImport.json')
     if(!Object.keys(Members[0]).includes(fieldToUpdate)
         || fieldToUpdate == "_id" || fieldToUpdate == "steamID"){

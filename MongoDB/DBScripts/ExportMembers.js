@@ -5,7 +5,10 @@ INSTRUCTIONS
 
 To use this script, you'll need to run this specific file from node:
 
-    node .\MongoDB\DBScripts\ImportMembers.js
+    - node .\MongoDB\DBScripts\ImportMembers.js <FILENAME>
+
+    - <FILENAME> is an optional parameter the script will default to MemberImport if no filename is provided
+        - No extension required
 
 The major things to be aware of are:
     - running this file will generate a json file containing all of the members currently in the database
@@ -21,13 +24,17 @@ const MongoConnection = require("../MongoConnection");
 const path = require('path');
 const fs = require('fs');
 
+var outputFilename = "MemberExport"
+if(process.argv[2]){
+    outputFilename = process.argv[2]
+}
 
 let results = []
 MongoConn = new MongoConnection()
 MongoConn.GetAllMembers().then(members => {
     results = [...members]
     var jsonContent = JSON.stringify(results, null, 2)
-    fs.writeFile(path.join(__dirname, "ScriptsOutput", "MemberImport.json"), jsonContent, 'utf8', () => {
+    fs.writeFile(path.join(__dirname, "ScriptsOutput", `${outputFilename}.json`), jsonContent, 'utf8', () => {
         console.log("JSON file has been saved.");
     });
 })
