@@ -25,9 +25,7 @@ const fs = require('fs');
 let results = []
 MongoConn = new MongoConnection()
 MongoConn.GetAllMembers().then(members => {
-    console.log(`Type of members ${typeof(members)}`)
     results = [...members]
-    console.log(results)
     var jsonContent = JSON.stringify(results, null, 2)
     fs.writeFile(path.join(__dirname, "ScriptsOutput", "MemberImport.json"), jsonContent, 'utf8', () => {
         console.log("JSON file has been saved.");
