@@ -34,7 +34,7 @@ if(process.argv[2]){
 }
 
 if(fs.existsSync(path.join(__dirname, "ScriptsOutput", `${sourceFolder}.json`))){
-    const Members = require('./ScriptsOutput/MemberImport.json')
+    const Members = require(`./ScriptsOutput/${sourceFolder}.json`)
     if(!Object.keys(Members[0]).includes(fieldToUpdate)
         || fieldToUpdate == "_id" || fieldToUpdate == "steamID"){
         console.log("Invalid fieldname") 
