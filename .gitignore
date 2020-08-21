@@ -91,3 +91,6 @@ secrets/
 
 # Package-Lock
 package-lock.json
+
+# MongoOutput
+MongoDB/DBScripts/ScriptsOutput
