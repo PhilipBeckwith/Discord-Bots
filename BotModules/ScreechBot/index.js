@@ -1,7 +1,7 @@
-const {
-  LOOPDELAY, // Delays the watch loop on the server by milliseconds to reduce server overhead. larger delay is less responsive.
-  GREETING_DELAY // Give some time before the greeting is played to allow the user to connect to the voice chat successfully.
-} = require('./config.json');
+// Delays the watch loop on the server by milliseconds to reduce server overhead. larger delay is less responsive.
+const LOOPDELAY = process.env.SCREECHBOT_LOOPDELAY ? process.env.SCREECHBOT_LOOPDELAY : 100;
+// Give some time before the greeting is played to allow the user to connect to the voice chat successfully.
+const GREETING_DELAY = process.env.SCREECHBOT_GREETING_DELAY ? process.env.SCREECHBOT_GREETING_DELAY : 2000;
 
 const EventEmitter = require('events');
 const path = require('path');
@@ -11,34 +11,31 @@ module.exports = function(bot) {
   class VoiceEmitter extends EventEmitter {}
   voiceChat = new VoiceEmitter();
 
-  //Simple command register. Allows for reuse of code and ease of adding in new commands
-  // - keyword: is the command keyword than spawns the action - TODO: create a way to receive arguments
-  // - helptext: is the text that will show up when the user calls the /help command. This should describe what the command does and how the user should use it.
-  // - action: is the function that is called when the keyword is typed in chat. Action function is of the form function(msg) with msg being the discord msg that spawned the command.
   var commands = [{
-    keyword: '/help',
-    helptext: 'When you are a noob and need to reference the commands',
-    action: help
-  },{
     keyword: '/screech',
     helptext: 'Because fuck everyone on the voice channel',
-    action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true)
+    action: playAudio(path.resolve(__dirname, "audio/screech.mp3"), true),
+    autoCleanup: true
   },{
     keyword: '/greeting',
     helptext: 'Nice way to say hello',
-    action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false)
+    action: playAudio(path.resolve(__dirname, "audio/greetings_traveler.mp3"), false),
+    autoCleanup: true
   },{
     keyword: '/join',
     helptext: 'Bot will join the voice channel you are on',
-    action: join
+    action: join,
+    autoCleanup: true
   },{
     keyword: '/leave',
     helptext: 'Bot GTFO the voice channel',
-    action: leave
+    action: leave,
+    autoCleanup: true
   },{
     keyword: '/watch',
     helptext: 'Stalk the voice channel and greet new comers',
-    action: watch
+    action: watch,
+    autoCleanup: true
   }];
 
 
@@ -46,38 +43,6 @@ module.exports = function(bot) {
     console.info(`Screechbot logged in as ${bot.user.tag}!`);
   });
 
-  // Command Processing. Cleans up commands after they have been issued
-  bot.on('message', msg => {
-    if (!msg.guild) return;
-
-    commands.forEach(command => {
-      if(msg.content === command.keyword){
-        command.action(msg);
-        msg.delete();
-      }
-    });
-
-  });
-
-  //Help text generation. Appears in the following format:
-  //
-  // Looks like {@user} is an idiot and needs guidence on the commands:
-  //
-  // Command: {keyword}
-  // {helptext}
-  //
-  // Next command etc...
-  //
-  //  - msg: the message object from discord https://discord.js.org/#/docs/main/stable/class/Message
-  function help(msg){
-    var reply = `Looks like ${msg.member} is an idiot and needs guidence on the commands: \n\n`;
-    commands.forEach(command => {
-      reply += "Command: " + command.keyword + `\n`;
-      reply += command.helptext + `\n\n`
-    });
-
-    msg.channel.send(reply);
-  }
 
   //The bot will join the voice channel that the command giver is currently on and then proceed to play an audio file or stream.
   // - audio: The file or stream to play - see https://discord.js.org/#/docs/main/stable/class/VoiceConnection?scrollTo=play
@@ -173,4 +138,7 @@ module.exports = function(bot) {
     }, GREETING_DELAY);
   });
 
+  return {
+    commands
+  }
 }

@@ -1,6 +1,5 @@
 const MongoConnection = require("../../MongoDB/MongoConnection")
 
-  
 module.exports = function(bot) {
 
   var commands = [{
@@ -20,15 +19,7 @@ module.exports = function(bot) {
   bot.on('ready', () => {
     console.info(`Steambot logged in as ${bot.user.tag}!`);
   });
-  
-  bot.on("message", msg => {
-    commands.forEach(command => {
-      if(msg.content.startsWith(command.keyword)){
-        command.action(msg);
-      }
-    });
-  });
-  
+
   function PickRandomSharedGame(msg){
     let mentions = msg.mentions.users.map(user => user.id)
     if(mentions.length > 1){
@@ -92,4 +83,8 @@ module.exports = function(bot) {
   function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   };
+
+  return {
+    commands
+  }
 }
