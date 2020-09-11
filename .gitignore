@@ -90,4 +90,7 @@ typings/
 secrets/
 
 # Package-Lock
-package-lock
+package-lock.json
+
+# MongoOutput
+MongoDB/DBScripts/ScriptsOutput

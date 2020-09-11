@@ -1,4 +1,4 @@
-const MongoDB = require('../../MongoDB/MongoDB')
+const MongoConnection = require("../../MongoDB/MongoConnection")
 
 module.exports = function(bot) {
 
@@ -23,29 +23,33 @@ module.exports = function(bot) {
   function PickRandomSharedGame(msg){
     let mentions = msg.mentions.users.map(user => user.id)
     if(mentions.length > 1){
-      MongoDB.GetCommonGames(mentions).then(games =>{
+      MongoConn = new MongoConnection()
+      MongoConn.GetCommonGames(mentions).then(games =>{
         let rdmIdx = Math.floor(Math.random() * games.length)
         msg.channel.send(`Lets play ${games[rdmIdx].name}!`)
-        MongoDB.Close()
       })
-        .catch(err => {
-          MongoDB.Close()
-          console.log(err)
-        })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(()=>{
+        MongoConn.CloseConnection()
+      })
     }
   };
 
   function ShowAllSharedGames(msg){
     let mentions = msg.mentions.users.map(user => user.id)
     if(mentions.length > 1){
-      MongoDB.GetCommonGames(mentions).then(games =>{
+      MongoConn = new MongoConnection()
+      MongoConn.GetCommonGames(mentions).then(games =>{
         msg.channel.send(`${msg.mentions.users.map(user => user.username).join(", ")} share: \n${games.map(game => game.name).join("\n")}`)
-        MongoDB.Close()
       })
-        .catch(err => {
-          MongoDB.Close()
-          console.log(err)
-        })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(()=>{
+        MongoConn.CloseConnection()
+      })
     }
   };
 
@@ -57,7 +61,8 @@ module.exports = function(bot) {
     }
     let pattern = new RegExp(escapeRegex(searchText), 'gi');
     msg.channel.send("Searching games...")
-    MongoDB.SearchGamesFromText(pattern).then(games =>{
+    MongoConn = new MongoConnection()
+    MongoConn.SearchGamesFromText(pattern).then(games =>{
       if(games.length == 0){
         msg.channel.send("No Results Found")
       }
@@ -67,10 +72,12 @@ module.exports = function(bot) {
         })
       }
     })
-      .catch(err => {
-        MongoDB.Close()
-        console.log(err)
-      })
+    .catch(err => {
+      console.log(err)
+    })
+    .finally(()=>{
+      MongoConn.CloseConnection()
+    })
   }
 
   function escapeRegex(text) {
