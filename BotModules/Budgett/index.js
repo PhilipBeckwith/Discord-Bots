@@ -1,36 +1,41 @@
 const schedule = require('node-schedule')
 const discord = require('discord.js');
 const getWednesdayMeme = require('./utils/utils');
-const {generalChatID, testMode, StagingID} = require('./config.json');
 
-let token = process.env.BUDGETT_TOKEN
+const chatID = process.env.BUDGETT_CHAT_ID;
+
+let token = process.env.BUDGETT_TOKEN;
 const bot = new discord.Client();
 var loggedin = false;
 
+function login(){
+  if(token){
+    bot.login(token);
+  }
+}
 
 const logOn = schedule.scheduleJob('0 0 4 * * 3', function(){
     console.log("It's Wednesday My Dudes!")
-    if(token){
-        bot.login(token);
-    }
+    login();
 });
 
 const logOut = schedule.scheduleJob('0 30 21 * * 3', function(){
     console.log("Wednesday's Over My Dudes!")
     bot.destroy();
+  loggedin = false;
 });
 
 const postWednesdayMessage = schedule.scheduleJob('0 10 9 * * 3', function(){
     console.log("Reminding the Bois it's wednesday.")
-    if(!loggedin){bot.login(token);}
-    bot.channels.cache.get(generalChatID).send(`It's Wednesday My Dudes!`);
+    if(!loggedin){ login(); }
+    bot.channels.cache.get(chatID).send(`It's Wednesday My Dudes!`);
 });
 
 const postWednesdayMeme = schedule.scheduleJob('0 40 11 * * 3', function(){
     console.log("Meme Time");
-    if(!loggedin){bot.login(token);}
+    if(!loggedin){ login(); }
     getWednesdayMeme()
-        .then(meme => bot.channels.cache.get(generalChatID).send(meme))
+        .then(meme => bot.channels.cache.get(chatID).send(meme))
 });
 
 bot.on('ready', () => {
@@ -38,7 +43,7 @@ bot.on('ready', () => {
     if(process.env.ENVIRONMENT == 'STAGING'){
         console.log("Are you ready kids?")
         getWednesdayMeme()
-            .then(meme => bot.channels.cache.get(StagingID).send(meme))
+            .then(meme => bot.channels.cache.get(chatID).send(meme))
     }
     loggedin = true;
 });
@@ -46,12 +51,11 @@ bot.on('ready', () => {
 bot.on("message", message => {
         if(message.content.match('GIVE ME WEDNESDAY!')){
             getWednesdayMeme()
-            .then(meme => bot.channels.cache.get(generalChatID).send(meme))
+            .then(meme => bot.channels.cache.get(chatID).send(meme))
         }
   })
 
-if(token){
-    bot.login(token);
-}
+
+login();
 
 console.log('It\'s wednesday');
