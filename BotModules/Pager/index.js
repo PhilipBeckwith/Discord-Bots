@@ -1,5 +1,4 @@
 const newRelic = require('newrelic');
-const users = require('./Users.json')
 const templates = require('./Template.json')
 const twilioConfig = require('./TwilioConfig.json')
 const twilioClient = require('twilio')(
@@ -8,24 +7,28 @@ const twilioClient = require('twilio')(
   lazyLoading: true 
 })
 
-String.prototype.interpolate = function(params) {
-  const names = Object.keys(params);
-  const vals = Object.values(params);
-  return new Function(...names, `return \`${this}\`;`)(...vals);
-}
+const users = JSON.parse(process.env.USER_ID_JSON);
 
-var commands = [{
+var commands = [
+  {
   keyword: '/SayHi',
   helptext: 'Just tell me who, and I will go say Hi!',
-  action: introductionCall
-},{
+  action: function(msg){
+    processCall(msg, introductionCall)
+  }
+},
+{
   keyword: '/page',
   helptext: 'Calls members and invites them to play',
-  action: pageFriend
+  action:  function(msg){
+    processCall(msg, pageFriend)
+  }
 },{
   keyword: '/call',
   helptext: 'calls someone with whatever you want',
-  action: customCall
+  action:  function(msg){
+    processCall(msg, customCall)
+  }
 }];
 
 function getName(user){
@@ -36,6 +39,10 @@ function getName(user){
 function getNumber(user){
   let PHONE_KEY = user.concat('_PHONE');
   return process.env[PHONE_KEY];
+}
+
+function getTwilioNumber(){
+  return process.env.TWILIO_PHONE_NUMBER;
 }
 
 function introductionCall(user, text){
@@ -64,29 +71,34 @@ function customCall(user, text){
   });
 }
 
-function makeCall(callConfig){
-  twilioClient.calls.create(callConfig)
-  .then(call => console.log(call.sid));
+async function processCall(msg, templateFormatter){
+    let mentions = msg.mentions.users.map(user => user.id)
+
+    for(const memberID of mentions){
+      let call = await createCall(memberID, msg, templateFormatter)
+      await makeCall(call);
+    }
 }
 
-module.exports = function(bot) {
+async function createCall(memberID, msg, templateFormatter){
+  let call = twilioConfig;
+  call.twiml = templateFormatter(users[memberID], msg.content);
+  call.from = getTwilioNumber();
+  call.to = getNumber(users[memberID]);
+  return call;
+}
 
-  bot.on('ready', () => {
-    console.info(`Page-Bot logged in as ${bot.user.tag}!`);
-  });
-  
-  bot.on("message", msg => {
-    commands.forEach(command => {
-      if(msg.content.startsWith(command.keyword)){
-        let mentions = msg.mentions.users.map(user => user.id)
-        mentions.forEach(id => {
-          var call = twilioConfig;
-          call.twiml = command.action(users[id], msg.content);
-          call.to = getNumber(users[id]);
-          makeCall(call);
-        })
-      }
-    });
-  });
+async function makeCall(callConfig){
+  let call = await twilioClient.calls.create(callConfig)
+  console.log(call.sid);
+}
 
+String.prototype.interpolate = function(params) {
+  const names = Object.keys(params);
+  const vals = Object.values(params);
+  return new Function(...names, `return \`${this}\`;`)(...vals);
+}
+
+module.exports = {
+  commands: commands
 }

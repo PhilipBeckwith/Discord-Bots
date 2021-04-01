@@ -1,16 +1,26 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
+// Import Bot Commands
 const Commander = require('../CommanderInChief/commander-in-chief');
+const pagerBot = require('../Pager/index');
 
-Commander.attachToBot(bot);
-require('../MemeNarc/index')(bot);
+// Import bots that Require being attached to the Discord-Bot (Deprecated)
 let ScreechBot = require('../ScreechBot/index')(bot);
-Commander.registerCommands("Screechbot", ScreechBot.commands);
 let SteamBot = require('../SteamBot/index')(bot);
-Commander.registerCommands("SteamBot", SteamBot.commands);
+
+
+require('../MemeNarc/index')(bot);
 require('../NewRelicCustomEvents/index')(bot);
-require('../Pager/index')(bot);
+
+// Attach Bot To Commander
+Commander.attachToBot(bot);
+
+// Attach all commands to The Commander Bot
+Commander.registerCommands("Screechbot", ScreechBot.commands);
+Commander.registerCommands("SteamBot", SteamBot.commands);
+Commander.registerCommands("PagerBot", pagerBot.commands);
+
 
 const TOKEN = process.env.BOT_TOKEN;
 
