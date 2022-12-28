@@ -7,10 +7,7 @@ const chatID = process.env.BUDGETT_CHAT_ID;
 let token = process.env.BUDGETT_TOKEN;
 const bot = new Client({
 	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildMembers,
 	],
 });
 
