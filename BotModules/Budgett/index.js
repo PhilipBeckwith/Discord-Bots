@@ -1,11 +1,20 @@
 const schedule = require('node-schedule')
-const discord = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const getWednesdayMeme = require('./utils/utils');
 
 const chatID = process.env.BUDGETT_CHAT_ID;
 
 let token = process.env.BUDGETT_TOKEN;
-const bot = new discord.Client();
+const bot = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
+});
+
+
 var loggedin = false;
 
 function login(){
