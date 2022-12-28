@@ -1,8 +1,11 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 
-const bot = new Client({
+const bot =new Client({
 	intents: [
-		GatewayIntentBits.MessageContent
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
 	],
 });
 
