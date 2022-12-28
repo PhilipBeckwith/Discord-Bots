@@ -1,5 +1,10 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 
+console.log(Object.keys(require('discord.js')))
+
+console.log('blah')
+console.log(GatewayIntentBits)
+
 const bot =new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
