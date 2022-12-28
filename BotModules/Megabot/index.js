@@ -5,10 +5,14 @@ const Commander = require('../CommanderInChief/commander-in-chief');
 
 Commander.attachToBot(bot);
 require('../MemeNarc/index')(bot);
-let ScreechBot = require('../ScreechBot/index')(bot);
-Commander.registerCommands("Screechbot", ScreechBot.commands);
-let SteamBot = require('../SteamBot/index')(bot);
-Commander.registerCommands("SteamBot", SteamBot.commands);
+
+
+// TODO fix and Enable These broken bots.
+//let SteamBot = require('../SteamBot/index')(bot);
+//Commander.registerCommands("SteamBot", SteamBot.commands);
+//let ScreechBot = require('../ScreechBot/index')(bot);
+//Commander.registerCommands("Screechbot", ScreechBot.commands);
+
 require('../NewRelicCustomEvents/index')(bot);
 
 const TOKEN = process.env.BOT_TOKEN;
