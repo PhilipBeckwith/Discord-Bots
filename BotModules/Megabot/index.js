@@ -1,5 +1,10 @@
-const Discord = require('discord.js');
-const bot = new Discord.Client();
+const { Client, GatewayIntentBits } = require('discord.js');
+
+const bot = new Client({
+	intents: [
+		GatewayIntentBits.MessageContent,
+	],
+});
 
 const Commander = require('../CommanderInChief/commander-in-chief');
 
