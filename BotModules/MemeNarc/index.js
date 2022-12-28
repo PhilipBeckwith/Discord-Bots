@@ -9,6 +9,7 @@ module.exports = function(bot) {
   });
 
   bot.on("message", message => {
+    console.log(message);
     if(message.author.bot == false) { //Any bot can post memes
       if(message.channel.id != memeChatID){ // Won't repost to same chat
         if(message.content.match(regex)){
