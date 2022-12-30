@@ -11,19 +11,27 @@ const bot =new Client({
 	],
 });
 
+// Import Bot Commands
 const Commander = require('../CommanderInChief/commander-in-chief');
+const pagerBot = require('../Pager/index');
 
-Commander.attachToBot(bot);
+// Import bots that Require being attached to the Discord-Bot (Deprecated)
+let ScreechBot = require('../ScreechBot/index')(bot);
+let SteamBot = require('../SteamBot/index')(bot);
+
+
 require('../MemeNarc/index')(bot);
 
-
-// TODO fix and Enable These broken bots.
-//let SteamBot = require('../SteamBot/index')(bot);
-//Commander.registerCommands("SteamBot", SteamBot.commands);
-//let ScreechBot = require('../ScreechBot/index')(bot);
-//Commander.registerCommands("Screechbot", ScreechBot.commands);
-
 require('../NewRelicCustomEvents/index')(bot);
+
+// Attach Bot To Commander
+Commander.attachToBot(bot);
+
+// Attach all commands to The Commander Bot
+Commander.registerCommands("Screechbot", ScreechBot.commands);
+Commander.registerCommands("SteamBot", SteamBot.commands);
+Commander.registerCommands("PagerBot", pagerBot.commands);
+
 
 const TOKEN = process.env.BOT_TOKEN;
 

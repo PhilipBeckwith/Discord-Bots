@@ -1,0 +1,6 @@
+{
+    "machineDetection": "Enable",
+     "twiml": "<Response><Say>Hello! I am active</Say></Response>",
+     "to": "",
+     "from": ""
+}
