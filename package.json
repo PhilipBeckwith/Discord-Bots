@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
+    "@discordjs/opus": "^0.8.0",
     "@newrelic/native-metrics": "latest",
     "discord.js": "14.7.1",
     "dom-parser": "^0.1.6",
