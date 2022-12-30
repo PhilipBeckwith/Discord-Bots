@@ -1,5 +1,15 @@
-const Discord = require('discord.js');
-const bot = new Discord.Client();
+const { Client, GatewayIntentBits } = require('discord.js');
+
+console.log(Object.keys(require('discord.js')))
+
+console.log('blah')
+console.log(GatewayIntentBits)
+
+const bot =new Client({
+	intents: [
+		GatewayIntentBits.MessageContent,
+	],
+});
 
 // Import Bot Commands
 const Commander = require('../CommanderInChief/commander-in-chief');
@@ -11,6 +21,7 @@ let SteamBot = require('../SteamBot/index')(bot);
 
 
 require('../MemeNarc/index')(bot);
+
 require('../NewRelicCustomEvents/index')(bot);
 
 // Attach Bot To Commander
