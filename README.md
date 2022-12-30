@@ -3,7 +3,7 @@
 ## Budgett
 Named after the "it's Wednsesday my dude" frog.
 
-This bot
+This bot 
 + loggs in on Wednesday
 + posts "It's Wednesday My Dudes." in the morning
 + posts a wednesday video in the afternoon
