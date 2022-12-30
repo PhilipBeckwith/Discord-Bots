@@ -14,3 +14,6 @@ require('newrelic');
 // TODO: Remove the deprecated bots. 
 // require('./BotModules/Budgett/index');
 // require('./BotModules/Megabot/index');
+
+require('./Budgett/budgett-bot')
+require('./Mega-Bot/megaBot')
