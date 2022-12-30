@@ -1,6 +1,0 @@
-{
-    "Call":"<Response><Say>${MESSAGE}</Say></Response>",
-    "ERROR": "<Response><Say voice=\"Polly.Nicole\">Hello ${NAME}! Your friends tried to call you, but fucked it up... They probably want to play games.</Say></Response>",
-    "Introduction" : "<Response><Say>Hello ${NAME}. I am Megabot. I am active! </Say></Response>",
-    "RequestGame" : "<Response><Say>Hello ${NAME}, This is NOT a drill. Gondor calls for aid. So get online bitch! </Say></Response>"
-}

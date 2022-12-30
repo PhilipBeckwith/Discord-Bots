@@ -9,10 +9,9 @@ const client = new Client({
 	],
 });
 
-// TODO
-// // Import Bot Commands
-// const Commander = require('../CommanderInChief/commander-in-chief');
-// const pagerBot = require('../Pager/index');
+// Import Bot Commands
+const Commander = require('./bots/commander-in-chief');
+const pagerBot = require('./bots/twillio');
 
 // TODO
 // // Import bots that Require being attached to the Discord-Bot (Deprecated)
@@ -25,12 +24,12 @@ require('./bots/NR-custom-events')(client);
 
 // TODO
 // // Attach Bot To Commander
-// Commander.attachToBot(bot);
+Commander.attachToBot(client);
 
 // // Attach all commands to The Commander Bot
 // Commander.registerCommands("Screechbot", ScreechBot.commands);
 // Commander.registerCommands("SteamBot", SteamBot.commands);
-// Commander.registerCommands("PagerBot", pagerBot.commands);
+Commander.registerCommands("PagerBot", pagerBot.commands);
 
 
 if(TOKEN) {
