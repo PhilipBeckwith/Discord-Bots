@@ -62,9 +62,11 @@ bot.on("message", message => {
   })
 
 
+
 if(process.env.ENVIRONMENT == 'STAGING' || new Date().getDay() === 3){
   login();
   console.log('It\'s wednesday');
 }else{
   console.log(`Budgett is sleeping for now, he'll return next wednesday.`)
 }
+
