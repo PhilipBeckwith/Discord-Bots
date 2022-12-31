@@ -11,7 +11,7 @@ jobs:
         run: npm install -g @actions/core 
       - name: Hello world action step
         id: hello
-        run: node ci-cd\github-action-restart-server.js
+        run: node ci-cd/github-action-restart-server.js
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
