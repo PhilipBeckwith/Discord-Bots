@@ -1,16 +1,13 @@
 on: [push]
 
 jobs:
- defaults:
-      run:
-        working-directory: ci-cd
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
       - name: Hello world action step
         id: hello
-        uses: PhilipBeckwith/Discord-Bots@v1.1
+        uses: PhilipBeckwith/Discord-Bots/ci-cd@v1.1
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
