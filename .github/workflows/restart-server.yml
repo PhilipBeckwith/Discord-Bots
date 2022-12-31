@@ -9,11 +9,16 @@ jobs:
         uses: actions/checkout@main
       - name: install Core
         run: npm install -g @actions/core 
+        with:
+          node-version: 16
+          cache: 'npm'
       - name: Hello world action step
         id: hello
         uses: ./ci-cd
         with:
           who-to-greet: 'Mona the Octocat'
+          node-version: 16
+          cache: 'npm'
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
