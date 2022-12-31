@@ -16,7 +16,8 @@
     "twilio": "3.84.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ci-cd": "node ci-cd/github-action-restart-server.js"
   },
   "repository": {
     "type": "git",

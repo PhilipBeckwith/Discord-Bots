@@ -10,9 +10,8 @@ jobs:
       - name: Hello world action step
         id: hello
         run: >
-          cd ci-cd && \
-            npm install -g axios && \
-            node github-action-restart-server.js
+          npm install -g axios && \
+            npm run ci-cd
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
