@@ -11,7 +11,7 @@ jobs:
         id: hello
         run: >
           cd ci-cd && \
-            npm install -g @actions/core && \
+            npm install -g axios && \
             node github-action-restart-server.js
       # Use the output from the `hello` step
       - name: Get the output time
