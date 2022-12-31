@@ -8,7 +8,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@main
       - name: install Core
-        working-directory: ./ci-cd
         run: npm install -g @actions/core 
       - name: Hello world action step
         id: hello
