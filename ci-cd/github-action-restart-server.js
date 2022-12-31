@@ -1,3 +1,5 @@
+console.log('this is a test')
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 

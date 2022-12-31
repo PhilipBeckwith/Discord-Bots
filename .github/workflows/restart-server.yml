@@ -11,11 +11,7 @@ jobs:
         run: npm install -g @actions/core 
       - name: Hello world action step
         id: hello
-        uses: ./ci-cd
-        with:
-          who-to-greet: 'Mona the Octocat'
-          node-version: 16
-          cache: 'npm'
+        run: node ci-cd\github-action-restart-server.js
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
