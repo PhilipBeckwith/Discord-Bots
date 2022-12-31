@@ -9,8 +9,8 @@ jobs:
         uses: actions/checkout@main
       - name: Hello world action step
         id: hello
-        run: | 
-        npm install -g @actions/core && /
+        run: |
+        npm install -g @actions/core && \
         node ci-cd/github-action-restart-server.js
       # Use the output from the `hello` step
       - name: Get the output time
