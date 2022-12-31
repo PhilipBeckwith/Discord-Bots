@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: PhilipBeckwith/Discord-Bots/ci-cd@main
+        uses: PhilipBeckwith/Discord-Bots/ci-cd
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
