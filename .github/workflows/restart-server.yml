@@ -14,4 +14,4 @@ jobs:
             -H "User-Agent: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'" \
             -H "Referer: https://panel.pebblehost.com" \
             -d "$RESTART_COMMAND" \
-            -X POST http://api.webhookinbox.com/i/Q07Cyopu/in/
+            -X POST https://panel.pebblehost.com/api.php
