@@ -10,7 +10,8 @@ jobs:
           RESTART_COMMAND: ${{ secrets.RESTART_COMMAND }}
         run: >
           curl \
+            -v \
             -H "User-Agent: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'" \
             -H "Referer: https://panel.pebblehost.com" \
             -d "$RESTART_COMMAND" \
-            -X POST https://panel.pebblehost.com/api.php
+            -X POST http://api.webhookinbox.com/i/Q07Cyopu/in/
