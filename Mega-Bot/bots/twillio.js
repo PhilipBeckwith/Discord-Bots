@@ -1,34 +1,14 @@
 const newRelic = require('newrelic');
 const {callConfig, templates} = require('./configs/TwilioConfig.json')
+const { SlashCommandBuilder, Options } = require('discord.js');
 const twilioClient = require('twilio')(
   process.env.TWILIO_ACCOUNT_SID, 
   process.env.TWILIO_AUTH_TOKEN, { 
   lazyLoading: true 
 })
 
+const USER_ID_REGEX = /<@(?<userId>\d*)>/g
 const users = JSON.parse(process.env.USER_ID_JSON);
-
-var commands = [
-  {
-  keyword: '/SayHi',
-  helptext: 'Just tell me who, and I will go say Hi!',
-  action: function(msg){
-    processCall(msg, introductionCall)
-  }
-},
-{
-  keyword: '/page',
-  helptext: 'Calls members and invites them to play',
-  action:  function(msg){
-    processCall(msg, pageFriend)
-  }
-},{
-  keyword: '/call',
-  helptext: 'calls someone with whatever you want',
-  action:  function(msg){
-    processCall(msg, customCall)
-  }
-}];
 
 function getName(user){
   let NAME_KEY = user.concat('_NAME');
@@ -58,30 +38,54 @@ function pageFriend(user, text){
   });
 }
 
-function customCall(user, text){
-  const message = text.match(/\[(.*)]/);
+function customCall(user, message){
   let name = getName(user);
   return message ?
    templates.Call.interpolate({
-    MESSAGE: message[1]
+    MESSAGE: message
   }) :
   templates.ERROR.interpolate({
     NAME: name
   });
 }
 
-async function processCall(msg, templateFormatter){
-    let mentions = msg.mentions.users.map(user => user.id)
+function getUserIds({options}){
+  const user = options.getUser('user')
+  const members = options.getString('members')
 
-    for(const memberID of mentions){
-      let call = await createCall(memberID, msg, templateFormatter)
-      await makeCall(call);
-    }
+  if(user)
+    return [user.id]
+
+  if(members)
+    return [...members.matchAll(USER_ID_REGEX)]
+      .map(match => match.groups.userId)
+
+  return [];
 }
 
-async function createCall(memberID, msg, templateFormatter){
+function replyToInteraction(members, interaction){
+  const message = (!members || members.length ===0) ? 
+    'Could not find any members in command':
+    `Calling <@${members.join('>, <@')}>`;
+
+  interaction.reply({ content: message, ephemeral: (!members || members.length ===0) });
+}
+
+async function processCall(templateFormatter, interaction){
+  const members = getUserIds(interaction)
+  const message = interaction.options.getString('message')
+
+  replyToInteraction(members, interaction)
+
+  for(const memberID of members){
+    let call = await createCall(memberID, message, templateFormatter)
+    await makeCall(call);
+  }
+}
+
+async function createCall(memberID, message, templateFormatter){
   let call = callConfig;
-  call.twiml = templateFormatter(users[memberID], msg.content);
+  call.twiml = templateFormatter(users[memberID], message);
   call.from = getTwilioNumber();
   call.to = getNumber(users[memberID]);
   return call;
@@ -89,7 +93,7 @@ async function createCall(memberID, msg, templateFormatter){
 
 async function makeCall(callConfig){
   let call = await twilioClient.calls.create(callConfig)
-  console.log(call.sid);
+  console.log(`Making Call id: ${call.sid}`);
 }
 
 String.prototype.interpolate = function(params) {
@@ -98,6 +102,54 @@ String.prototype.interpolate = function(params) {
   return new Function(...names, `return \`${this}\`;`)(...vals);
 }
 
+const hello = {
+  execute: processCall.bind(null, introductionCall),
+  data: new SlashCommandBuilder()
+    .setName('hello')
+    .setDescription('Send a very pointless Automated Phonecall to people you want to anoy.')
+    .addUserOption(option => option
+      .setName('user')
+      .setDescription(`Select a user to call. (Takes Priority over Members)`))
+    .addStringOption(option => option
+      .setName('members')
+      .setDescription(`@ Multiple people and they'll all get called.`)
+      .setMaxLength(200))
+}
+
+const page = {
+  execute: processCall.bind(null, pageFriend),
+  data: new SlashCommandBuilder()
+    .setName('page')
+    .setDescription('Summon Friends Via automated Phone call.')
+    .addUserOption(option => option
+      .setName('user')
+      .setDescription(`Select a user to call. (Takes Priority over Members)`))
+    .addStringOption(option => option
+      .setName('members')
+      .setDescription(`@ Multiple people and they'll all get paged.`)
+      .setMaxLength(200))
+}
+
+const call = {
+  execute: processCall.bind(null, customCall),
+  data: new SlashCommandBuilder()
+    .setName('call')
+    .setDescription('Automated Phone call with a custom message.')
+    .addUserOption(option => option
+      .setName('user')
+      .setDescription(`Select a user to call. (Takes Priority over Members)`))
+    .addStringOption(option => option
+      .setName('members')
+      .setDescription(`@ Multiple people and they'll all get called.`)
+      .setMaxLength(200))
+    .addStringOption(option => option
+      .setName('message')
+      .setDescription(`The message you'd like your friend(s) to recieve.`)
+      .setMaxLength(200))
+}
+
+const slashCommands = {page, call, hello}
+
 module.exports = {
-  commands: commands
+  slashCommands: slashCommands
 }
