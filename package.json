@@ -16,6 +16,7 @@
     "twilio": "3.84.0"
   },
   "scripts": {
+    "dev-local": "nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/PhilipBeckwith/Discord-Bots/issues"
   },
-  "homepage": "https://github.com/PhilipBeckwith/Discord-Bots#readme"
+  "homepage": "https://github.com/PhilipBeckwith/Discord-Bots#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
