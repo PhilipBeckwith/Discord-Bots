@@ -1,37 +1,41 @@
-const { Client, Events, IntentsBitField } = require('discord.js');
-const TOKEN = process.env.BOT_TOKEN;
+const { Client, IntentsBitField, GatewayIntentBits } = require('discord.js');
+const {registerSlashCommands, publishSlashCommands, registerInteractionListener} = require('./bots/slash-commands')
+const {BOT_TOKEN, MEGA_BOT_APP_ID, HOME_GUILD_ID, ENVIRONMENT} = process.env;
 
 const client = new Client({
 	intents: [
 		IntentsBitField.Flags.MessageContent,
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMessages,
+    	IntentsBitField.Flags.Guilds,
+    	IntentsBitField.Flags.GuildMessages,
+		GatewayIntentBits.Guilds
 	],
 });
 
-// Import Bot Commands
+// Import Bot aspects
 const Commander = require('./bots/commander-in-chief');
 const pagerBot = require('./bots/twillio');
+
+require('./bots/meme-narc')(client);
+require('./bots/NR-custom-events')(client);
+
+Commander.attachToBot(client);
 
 // TODO
 // // Import bots that Require being attached to the Discord-Bot (Deprecated)
 // let ScreechBot = require('../ScreechBot/index')(bot);
 // let SteamBot = require('../SteamBot/index')(bot);
-
-
-require('./bots/meme-narc')(client);
-require('./bots/NR-custom-events')(client);
-
-// TODO
-// // Attach Bot To Commander
-Commander.attachToBot(client);
-
 // // Attach all commands to The Commander Bot
 // Commander.registerCommands("Screechbot", ScreechBot.commands);
 // Commander.registerCommands("SteamBot", SteamBot.commands);
-Commander.registerCommands("PagerBot", pagerBot.commands);
 
+registerSlashCommands(pagerBot.slashCommands)
+registerInteractionListener(client)
 
-if(TOKEN) {
-	client.login(TOKEN);
+if(BOT_TOKEN) {
+	client.login(BOT_TOKEN);
+	if(ENVIRONMENT !=='PRODUCTION'){
+		publishSlashCommands(BOT_TOKEN, MEGA_BOT_APP_ID, HOME_GUILD_ID)
+	}else{
+		publishSlashCommands(BOT_TOKEN, MEGA_BOT_APP_ID)
+	}
 }
