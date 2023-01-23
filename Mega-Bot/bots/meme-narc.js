@@ -18,10 +18,12 @@ function memeIsInWrongChannel(message){
     message.content.match(regex);       // Only Move Memes. 
 }
 
-function enforceMemeChanel(client, message){
+async function enforceMemeChanel(client, message){
   if(memeIsInWrongChannel(message)){
-    moveMemeToMemeChannel(client, message)
-    deleteMessage(message);
+    await Promise.all([
+      moveMemeToMemeChannel(client, message),
+      deleteMessage(message)
+    ])
   }
 }
 

@@ -29,11 +29,19 @@ function instrementBackgroundTransaction(method){
         return method;
     }
 
+    if(method.segmentInstrumented){
+        logger.warn(`${method.name} is already an instrumented segment. This might cause unexpected behavour.`)
+    }
+
     logger.info(`Instrumented Method ${method.name}`)
     const instrementedMethod = function(){
         return newRelic.startBackgroundTransaction(
-            method.name, ()=>{
-            return method(...arguments)
+            method.name, async () => {
+                logger.info(`Starting Transaction ${method.name}`)
+                console.time(method.name)
+                const returnData =  await method(...arguments)
+                logger.info(`Transaction ${method.name} compleeted in ${console.timeEnd(method.name)} MS`)
+                return returnData;
         })
     }
 

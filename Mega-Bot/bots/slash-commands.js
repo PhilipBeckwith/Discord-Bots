@@ -1,13 +1,13 @@
 const newrelic = require('newrelic')
 const logger = require('../../utils/logger').getLogger('Slash-Command-Handler')
 const {Events, REST, Routes} = require('discord.js');
-const {instrementSegment} = require('../../utils/newRelic-utils')
+const {instrementBackgroundTransaction, instrementSegment} = require('../../utils/newRelic-utils')
 
 const slashCommands = {}
 
 function registerSlashCommands(botSlashCommands){
     Object.keys(botSlashCommands).forEach(key => {
-        botSlashCommands[key].execute = instrementSegment(botSlashCommands[key].execute)
+        botSlashCommands[key].execute = instrementBackgroundTransaction(botSlashCommands[key].execute)
     })
     Object.assign(slashCommands, botSlashCommands)
 }
@@ -17,10 +17,7 @@ function executeCommand(interaction){
     if (!interaction.isChatInputCommand()) return;
 
     if(slashCommands[interaction.commandName])
-    newrelic.startBackgroundTransaction(
-        interaction.commandName,
-        slashCommands[interaction.commandName].execute(interaction)
-    )
+    slashCommands[interaction.commandName].execute(interaction)
 }
 
 async function publishSlashCommands(token, applicationId, guildId){

@@ -96,7 +96,7 @@ async function createCall(memberID, message, templateFormatter){
 
 async function makeCall(callConfig){
   let call = await twilioClient.calls.create(callConfig)
-  console.log(`Making Call id: ${call.sid}`);
+  logger.info(`Making Call id: ${call.sid}`);
 }
 
 String.prototype.interpolate = function(params) {
