@@ -1,3 +1,4 @@
+const {instrementMethod} = require('../utils/newRelic-utils')
 const {Events} = require('discord.js');
 
 const regex = /(https:\/\/)?(9gag\.com\/gag\/).*/g;
@@ -33,5 +34,10 @@ async function deleteMessage(message){
   await message.delete();
   console.log("Mess cleaned.")
 }
+
+registerListeners = instrementMethod(registerListeners)
+memeIsInWrongChannel = instrementMethod(memeIsInWrongChannel)
+enforceMemeChanel = instrementMethod(enforceMemeChanel)
+moveMemeToMemeChannel = instrementMethod(moveMemeToMemeChannel)
 
 module.exports = registerListeners;

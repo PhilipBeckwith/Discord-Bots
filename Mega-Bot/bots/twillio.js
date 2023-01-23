@@ -1,4 +1,3 @@
-const newRelic = require('newrelic');
 const {callConfig, templates} = require('./configs/TwilioConfig.json')
 const { SlashCommandBuilder, Options } = require('discord.js');
 const twilioClient = require('twilio')(

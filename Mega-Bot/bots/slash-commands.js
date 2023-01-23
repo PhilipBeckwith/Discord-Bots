@@ -1,8 +1,12 @@
 const {Events, REST, Routes} = require('discord.js');
+const {instrementMethod} = require('../utils/newRelic-utils')
 
 const slashCommands = {}
 
 function registerSlashCommands(botSlashCommands){
+    Object.keys(botSlashCommands).forEach(key => {
+        botSlashCommands[key] = instrementMethod(botSlashCommands[key])
+    })
     Object.assign(slashCommands, botSlashCommands)
 }
 
@@ -47,6 +51,13 @@ async function postToGuild(restClient, commandMetadata, applicationId, guildId){
 function registerInteractionListener(discordClient){
     discordClient.on(Events.InteractionCreate, executeCommand);
 }
+
+registerSlashCommands = instrementMethod(registerSlashCommands)
+executeCommand = instrementMethod(executeCommand)
+publishSlashCommands = instrementMethod(publishSlashCommands)
+postGlobally = instrementMethod(postGlobally)
+postToGuild = instrementMethod(postToGuild)
+registerInteractionListener = instrementMethod(registerInteractionListener)
 
 module.exports = {
     registerSlashCommands,
