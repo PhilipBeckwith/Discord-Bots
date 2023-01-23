@@ -1,3 +1,4 @@
+const logger = require('../../utils/logger')('NR-Event-Emmiter')
 var newrelic = require('newrelic');
 const {Events} = require('discord.js');
 
@@ -11,14 +12,14 @@ function reccordMessageStats(message){
   try{
     newrelic.recordCustomEvent('DiscordUsageStats', messageStats);
   }catch(err){
-    console.log("Well shit.... There goes our observability.")
+    logger.warn("Well shit.... There goes our observability.")
   }
 }
 
 function registerListeners(client) {
   client.on(Events.MessageCreate, reccordMessageStats)
   client.on(Events.ClientReady, () => {
-    console.info(`Stats-Bot logged in as ${client.user.tag}!`);
+    logger.info(`Stats-Bot logged in as ${client.user.tag}!`);
   });
 }
 

@@ -1,6 +1,9 @@
+const logger = require('./logger').getLogger('mega-bot')
 const { Client, IntentsBitField, GatewayIntentBits } = require('discord.js');
 const {registerSlashCommands, publishSlashCommands, registerInteractionListener} = require('./bots/slash-commands')
 const {BOT_TOKEN, MEGA_BOT_APP_ID, HOME_GUILD_ID, ENVIRONMENT} = process.env;
+
+logger.info('MegaBot Starting up...')
 
 const client = new Client({
 	intents: [
@@ -30,6 +33,8 @@ Commander.attachToBot(client);
 
 registerSlashCommands(pagerBot.slashCommands)
 registerInteractionListener(client)
+
+logger.info('All sub bot behavours registerd...')
 
 if(BOT_TOKEN) {
 	client.login(BOT_TOKEN);

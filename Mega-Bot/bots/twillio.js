@@ -1,3 +1,4 @@
+const logger = require('../../utils/logger')('twillio')
 const {callConfig, templates} = require('./configs/TwilioConfig.json')
 const { SlashCommandBuilder, Options } = require('discord.js');
 const twilioClient = require('twilio')(
@@ -24,6 +25,7 @@ function getTwilioNumber(){
 }
 
 function introductionCall(user, text){
+  console.warn('Introduction Call. (Deprecated...)')
   let name = getName(user);
   return message = templates.Introduction.interpolate({
     NAME: name
@@ -31,6 +33,7 @@ function introductionCall(user, text){
 }
 
 function pageFriend(user, text){
+  logger.info('Paging user.')
   let name = getName(user);
   return templates.RequestGame.interpolate({
     NAME: name
@@ -38,6 +41,7 @@ function pageFriend(user, text){
 }
 
 function customCall(user, message){
+  logger.info('Making Custom Call.')
   let name = getName(user);
   return message ?
    templates.Call.interpolate({

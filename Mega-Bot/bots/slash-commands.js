@@ -1,5 +1,6 @@
+const logger = require('../../utils/logger')('Slash-Command-Handler')
 const {Events, REST, Routes} = require('discord.js');
-const {instrementMethod} = require('../utils/newRelic-utils')
+const {instrementMethod} = require('../../utils/newRelic-utils')
 
 const slashCommands = {}
 
@@ -11,7 +12,7 @@ function registerSlashCommands(botSlashCommands){
 }
 
 function executeCommand(interaction){
-    console.log('Interaction started')
+    logger.info('Interaction started')
     if (!interaction.isChatInputCommand()) return;
 
     if(slashCommands[interaction.commandName])
@@ -22,15 +23,15 @@ async function publishSlashCommands(token, applicationId, guildId){
 	try {
         const commandMetadata = Object.values(slashCommands).map(command => command.data)
         const restClient = new REST({ version: '10' }).setToken(token);
-		console.log(`Started refreshing ${commandMetadata.length} application (/) commands.`);
+		logger.info(`Started refreshing ${commandMetadata.length} application (/) commands.`);
 
 		const data = guildId ? 
             await postToGuild(restClient, commandMetadata, applicationId, guildId) :  
             await postGlobally(restClient, commandMetadata, applicationId);
 
-		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+            logger.info(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
-		console.error(error);
+		logger.warn(error);
 	}
 }
 

@@ -1,12 +1,13 @@
+const logger = require('./logger').getLogger('newRelicUtils')
 const newRelic = require('newrelic')
 
 function instrementMethod(method){
     if(method.instrumented){
-        console.log(`${method.name} is already instrumented...`)
+        logger.warn(`${method.name} is already instrumented...`)
         return method;
     }
 
-    console.log(`Instrumented Method ${method.name}`)
+    logger.info(`Instrumented Method ${method.name}`)
     const instrementedMethod = function(){
         return newRelic.startSegment(method.name, true, ()=>{
             return method(...arguments)
@@ -23,7 +24,7 @@ function instrementMethod(method){
 }
 
 function instrementModule(module) {
-    console.log(module.name)
+    logger.info(module.name)
     Object.keys(module).forEach(key=>{
         blah[key] = instrementMethod(blah[key])
     })
