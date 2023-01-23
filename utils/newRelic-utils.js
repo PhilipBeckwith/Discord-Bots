@@ -31,7 +31,7 @@ function instrementBackgroundTransaction(method){
 
     logger.info(`Instrumented Method ${method.name}`)
     const instrementedMethod = function(){
-        return newrelic.startBackgroundTransaction(
+        return newRelic.startBackgroundTransaction(
             method.name, ()=>{
             return method(...arguments)
         })

@@ -1,5 +1,4 @@
 const logger = require('../../utils/logger').getLogger('meme-narc')
-const newrelic = require('newrelic')
 const {instrementSegment, instrementBackgroundTransaction} = require('../../utils/newRelic-utils')
 const {Events} = require('discord.js');
 
