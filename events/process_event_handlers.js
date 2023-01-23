@@ -3,7 +3,7 @@ const logger = require('../utils/logger').getLogger('Process Event Handlers.')
 
 process.once('uncaughtException', (err, origin) => {
     newRelic.noticeError(err)
-    logger.error(`Uncaught Exception, ${err} : ${origin}`)
+    logger.error(`Uncaught Exception, ${err} : ${origin} \n${err.stack}`)
     process.exit(-1)
 });
 
