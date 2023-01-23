@@ -9,8 +9,9 @@ function instrementSegment(method){
 
     logger.info(`Instrumented Method ${method.name}`)
     const instrementedMethod = function(){
-        return newRelic.startSegment(method.name, true, ()=>{
-            return method(...arguments)
+        return newRelic.startSegment(method.name, true, async ()=>{
+            logger.info(`Starting Segment ${method.name}`)
+            return await method(...arguments)
         })
     }
 
@@ -39,9 +40,7 @@ function instrementBackgroundTransaction(method){
             method.name, async () => {
                 logger.info(`Starting Transaction ${method.name}`)
                 console.time(method.name)
-                const returnData =  await method(...arguments)
-                logger.info(`Transaction ${method.name} compleeted in ${console.timeEnd(method.name)} MS`)
-                return returnData;
+                return await method(...arguments)
         })
     }
 
