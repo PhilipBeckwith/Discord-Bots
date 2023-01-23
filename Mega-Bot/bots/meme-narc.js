@@ -41,5 +41,6 @@ async function deleteMessage(message){
 memeIsInWrongChannel = instrementSegment(memeIsInWrongChannel)
 enforceMemeChanel = instrementBackgroundTransaction(enforceMemeChanel)
 moveMemeToMemeChannel = instrementSegment(moveMemeToMemeChannel)
+deleteMessage = instrementSegment(deleteMessage)
 
 module.exports = registerListeners;
