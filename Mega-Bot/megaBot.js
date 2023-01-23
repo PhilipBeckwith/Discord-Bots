@@ -1,4 +1,4 @@
-const logger = require('./logger').getLogger('mega-bot')
+const logger = require('../utils/logger').getLogger('mega-bot')
 const { Client, IntentsBitField, GatewayIntentBits } = require('discord.js');
 const {registerSlashCommands, publishSlashCommands, registerInteractionListener} = require('./bots/slash-commands')
 const {BOT_TOKEN, MEGA_BOT_APP_ID, HOME_GUILD_ID, ENVIRONMENT} = process.env;

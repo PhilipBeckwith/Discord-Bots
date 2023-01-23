@@ -1,4 +1,4 @@
-const logger = require('../../utils/logger')('twillio')
+const logger = require('../../utils/logger').getLogger('twillio')
 const {callConfig, templates} = require('./configs/TwilioConfig.json')
 const { SlashCommandBuilder, Options } = require('discord.js');
 const twilioClient = require('twilio')(

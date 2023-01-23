@@ -1,4 +1,4 @@
-const logger = require('../../utils/logger')('NR-Event-Emmiter')
+const logger = require('../../utils/logger').getLogger('NR-Event-Emmiter')
 var newrelic = require('newrelic');
 const {Events} = require('discord.js');
 

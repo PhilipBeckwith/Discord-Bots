@@ -10,6 +10,9 @@ require('dotenv').config();
 // New Relic
 require('newrelic');
 
+// Process Event Handlers
+require('./events/process_event_handlers')
+
 // Running bots
 // TODO: Remove the deprecated bots. 
 // require('./BotModules/Budgett/index');

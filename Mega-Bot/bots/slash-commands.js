@@ -1,4 +1,4 @@
-const logger = require('../../utils/logger')('Slash-Command-Handler')
+const logger = require('../../utils/logger').getLogger('Slash-Command-Handler')
 const {Events, REST, Routes} = require('discord.js');
 const {instrementMethod} = require('../../utils/newRelic-utils')
 

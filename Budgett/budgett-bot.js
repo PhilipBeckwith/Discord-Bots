@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')('budgett')
+const logger = require('../utils/logger').getLogger('budgett')
 const schedule = require('node-schedule')
 const { Client, Events, IntentsBitField } = require('discord.js');
 const {getWednesdayMeme} = require('./utils/utils');
