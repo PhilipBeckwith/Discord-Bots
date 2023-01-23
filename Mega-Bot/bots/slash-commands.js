@@ -1,12 +1,13 @@
+const newrelic = require('newrelic')
 const logger = require('../../utils/logger').getLogger('Slash-Command-Handler')
 const {Events, REST, Routes} = require('discord.js');
-const {instrementMethod} = require('../../utils/newRelic-utils')
+const {instrementSegment} = require('../../utils/newRelic-utils')
 
 const slashCommands = {}
 
 function registerSlashCommands(botSlashCommands){
     Object.keys(botSlashCommands).forEach(key => {
-        botSlashCommands[key].execute = instrementMethod(botSlashCommands[key].execute)
+        botSlashCommands[key].execute = instrementSegment(botSlashCommands[key].execute)
     })
     Object.assign(slashCommands, botSlashCommands)
 }
@@ -16,7 +17,10 @@ function executeCommand(interaction){
     if (!interaction.isChatInputCommand()) return;
 
     if(slashCommands[interaction.commandName])
-    slashCommands[interaction.commandName].execute(interaction)
+    newrelic.startBackgroundTransaction(
+        interaction.commandName,
+        slashCommands[interaction.commandName].execute(interaction)
+    )
 }
 
 async function publishSlashCommands(token, applicationId, guildId){
@@ -53,12 +57,12 @@ function registerInteractionListener(discordClient){
     discordClient.on(Events.InteractionCreate, executeCommand);
 }
 
-registerSlashCommands = instrementMethod(registerSlashCommands)
-executeCommand = instrementMethod(executeCommand)
-publishSlashCommands = instrementMethod(publishSlashCommands)
-postGlobally = instrementMethod(postGlobally)
-postToGuild = instrementMethod(postToGuild)
-registerInteractionListener = instrementMethod(registerInteractionListener)
+registerSlashCommands = instrementSegment(registerSlashCommands)
+executeCommand = instrementSegment(executeCommand)
+publishSlashCommands = instrementSegment(publishSlashCommands)
+postGlobally = instrementSegment(postGlobally)
+postToGuild = instrementSegment(postToGuild)
+registerInteractionListener = instrementSegment(registerInteractionListener)
 
 module.exports = {
     registerSlashCommands,

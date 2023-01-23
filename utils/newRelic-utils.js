@@ -1,9 +1,9 @@
 const logger = require('./logger').getLogger('newRelicUtils')
 const newRelic = require('newrelic')
 
-function instrementMethod(method){
-    if(method.instrumented){
-        logger.warn(`${method.name} is already instrumented...`)
+function instrementSegment(method){
+    if(method.segmentInstrumented){
+        logger.warn(`${method.name} is already an instrumented segment...`)
         return method;
     }
 
@@ -14,8 +14,8 @@ function instrementMethod(method){
         })
     }
 
-    instrementMethod.instrumented = true;
-    Object.defineProperty(instrementMethod, 'name', {
+    instrementedMethod.segmentInstrumented = true;
+    Object.defineProperty(instrementedMethod, 'name', {
         value: method.name,
         writable: false
       });
@@ -23,16 +23,30 @@ function instrementMethod(method){
     return instrementedMethod;
 }
 
-function instrementModule(module) {
-    logger.info(module.name)
-    Object.keys(module).forEach(key=>{
-        blah[key] = instrementMethod(blah[key])
-    })
+function instrementBackgroundTransaction(method){
+    if(method.transactionInstrumented){
+        logger.warn(`${method.name} is already an instrumented transaction...`)
+        return method;
+    }
 
-    return module;
+    logger.info(`Instrumented Method ${method.name}`)
+    const instrementedMethod = function(){
+        return newrelic.startBackgroundTransaction(
+            method.name, ()=>{
+            return method(...arguments)
+        })
+    }
+
+    instrementedMethod.transactionInstrumented = true;
+    Object.defineProperty(instrementedMethod, 'name', {
+        value: method.name,
+        writable: false
+      });
+
+    return instrementedMethod;
 }
 
 module.exports = {
-    instrementMethod: instrementMethod,
-    instrementModule: instrementModule
+    instrementSegment: instrementSegment,
+    instrementBackgroundTransaction: instrementBackgroundTransaction
 }

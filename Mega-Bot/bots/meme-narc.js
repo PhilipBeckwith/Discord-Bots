@@ -1,5 +1,6 @@
 const logger = require('../../utils/logger').getLogger('meme-narc')
-const {instrementMethod} = require('../../utils/newRelic-utils')
+const newrelic = require('newrelic')
+const {instrementSegment, instrementBackgroundTransaction} = require('../../utils/newRelic-utils')
 const {Events} = require('discord.js');
 
 const regex = /(https:\/\/)?(9gag\.com\/gag\/).*/g;
@@ -36,9 +37,8 @@ async function deleteMessage(message){
   logger.info("Mess cleaned.")
 }
 
-registerListeners = instrementMethod(registerListeners)
-memeIsInWrongChannel = instrementMethod(memeIsInWrongChannel)
-enforceMemeChanel = instrementMethod(enforceMemeChanel)
-moveMemeToMemeChannel = instrementMethod(moveMemeToMemeChannel)
+memeIsInWrongChannel = instrementSegment(memeIsInWrongChannel)
+enforceMemeChanel = instrementBackgroundTransaction(enforceMemeChanel)
+moveMemeToMemeChannel = instrementSegment(moveMemeToMemeChannel)
 
 module.exports = registerListeners;
