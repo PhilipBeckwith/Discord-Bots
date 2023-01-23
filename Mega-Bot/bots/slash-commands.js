@@ -5,7 +5,7 @@ const slashCommands = {}
 
 function registerSlashCommands(botSlashCommands){
     Object.keys(botSlashCommands).forEach(key => {
-        botSlashCommands[key] = instrementMethod(botSlashCommands[key])
+        botSlashCommands[key].execute = instrementMethod(botSlashCommands[key].execute)
     })
     Object.assign(slashCommands, botSlashCommands)
 }
