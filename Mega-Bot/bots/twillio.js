@@ -56,6 +56,9 @@ function getUserIds({options}){
   const user = options.getUser('user')
   const members = options.getString('members')
 
+  console.log('HERE')
+  console.log(user)
+  
   if(user)
     return [user.id]
 
